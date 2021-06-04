@@ -41,6 +41,7 @@ import AppConfig from "../../config/AppConfig";
 import SignInConfig from "../../config/SignInConfig";
 
 import ArrayUtils from "../../utils/ArrayUtils";
+import JwtUtils from "../../utils/JwtUtils";
 
 const Footer = () => {
   // React router hook
@@ -59,14 +60,14 @@ const Footer = () => {
   // Token
   let { token } = useSelector((state) => state.token);
   if (token === null) {
-    token = localStorage.getItem('token');
+    token = localStorage.getItem("token");
     if (token !== null) {
       history.push("/");
     }
   }
 
   // handle render home page
-  const renderHomPage = () => {
+  const renderHomePage = () => {
     history.push("/");
   };
 
@@ -74,7 +75,7 @@ const Footer = () => {
   const handleSignInPhoneNumber = async () => {
     const result = await CustomDialog(
       <Provider store={store}>
-        <PopupSignInPhoneNumber renderHomPage={renderHomPage}/>
+        <PopupSignInPhoneNumber renderHomePage={renderHomePage} />
       </Provider>,
       {}
     );
@@ -165,7 +166,7 @@ const Footer = () => {
     (async () => {
       try {
         // request to server
-        const { success, message, data } = await service.login_Success(
+        const { success, message, data } = await apiService.signInWithGG(
           id,
           accessToken
         );
@@ -220,63 +221,87 @@ const Footer = () => {
 
   // handle Google facebook
   const handleSignInGoogle = (res) => {
-    const id = res.tokenId;
+    const tokenId = res.tokenId;
     const accessToken = res.accessToken;
 
     dispatch(action.loadingAction.turnOn());
     (async () => {
       try {
         // request to server
-        const { success, message, data } = await service.login_Success(
-          id,
+        const { errorCode, data } = await apiService.signInWithGG(
+          tokenId,
           accessToken
         );
-
         dispatch(action.loadingAction.turnOff());
 
-        if (success) {
-          let token = null;
-          let userID = null;
-          let fullName = null;
-          let avatarUrl = null;
-          const status = parseInt(data.status);
+        let token = null;
+        let userID = null;
+        let fullName = null;
+        let avatarUrl = null;
 
-          switch (status) {
-            case SignInConfig.STATUS.SUCESS:
-              token = data.token;
-              userID = data.userID;
-              fullName = data.fullName;
-              avatarUrl = data.avatarUrl;
-              // set token - profile
-              // redux
-              dispatch(action.tokenAction.signIn(token));
-              dispatch(
-                action.profileAction.signIn(userID, fullName, avatarUrl)
-              );
-              // localstorage
-              localStorage.setItem("token", token);
-              localStorage.setItem("userID", userID);
-              localStorage.setItem("avatar", avatarUrl);
-              localStorage.setItem("fullName", fullName);
-              // push history
-              history.push("/");
-              return;
-            case SignInConfig.STATUS.VERTIFY:
-              userID = data.userID;
-              // redux
-              dispatch(action.profileAction.signIn(userID, "", ""));
-              // push history
+        switch (errorCode) {
+          case SignInConfig.STATUS.SUCESS:
+            // login for the first
+            if (data.user) {
+              localStorage.setItem("user", data.user);
               history.push("/vertify-phone");
               return;
-            case SignInConfig.STATUS.WRONG:
-              setErrMsg("Thông tin đăng nhập không chính xác");
+            }
+            
+            // login normal
+            if (data.token !== null) {
+              dispatch(action.tokenAction.signIn(data.token));
+              localStorage.setItem("token", data.token);
+              handleGetUserInfo(data.token);
               return;
-          }
-        }
+            }
 
-        alert(message);
+            return;
+          case SignInConfig.STATUS.VERTIFY:
+            userID = data.user;
+            // redux
+            dispatch(action.profileAction.signIn(userID, "", ""));
+            // push history
+            history.push("/vertify-phone");
+            return;
+          case SignInConfig.STATUS.WRONG:
+            setErrMsg("Thông tin đăng nhập không chính xác");
+            return;
+        }
       } catch (e) {
         console.log(`[HANDLE_SIGNIN_GG_FAILED]: ${e.message}`);
+      }
+    })();
+  };
+
+  const handleGetUserInfo = function (token) {
+    var userId = JwtUtils.parseJwt(token).id;
+
+    dispatch(action.loadingAction.turnOn());
+    (async () => {
+      try {
+        // request to server
+        const { errorCode, data } = await apiService.getUserInfo(userId);
+        dispatch(action.loadingAction.turnOff());
+
+        let userID = data.user.id;
+        let fullName = data.user.FullName;
+        let avatar = data.user.Avatar;
+        let phone = data.user.Phone;
+
+        if (errorCode === 0) {
+          // redux
+          dispatch(action.profileAction.signIn(userID, fullName, avatar, phone));
+          // localstorage
+          localStorage.setItem("userID", userID);
+          localStorage.setItem("avatar", avatar);
+          localStorage.setItem("fullName", fullName);
+          localStorage.setItem("phone", phone);
+          // history
+          history.push("/");
+        }
+      } catch (e) {
+        console.log(`[HANDLE_GET_USERINFO_FAILED]: ${e.message}`);
       }
     })();
   };
