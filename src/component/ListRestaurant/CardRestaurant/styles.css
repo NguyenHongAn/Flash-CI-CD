@@ -1,0 +1,96 @@
+.listRes_card-custom {
+  position: relative;
+  height: 16em !important;
+  width: 19% !important;
+  margin: 0.7% 0.4% !important;
+  background-color: white;
+  border-radius: 6px;
+  border: 1px solid #ddd !important;
+}
+
+.listRes_reddot {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  border-radius: 5%;
+  padding: 0.1% 5%;
+  text-align: center;
+  font-size: 0.7rem;
+  color: white;
+}
+
+.listRes_span-like {
+  position: absolute;
+  top: 51%;
+  left: 2%;
+}
+
+.listRes_red {
+  background-color: #cf2127;
+}
+
+.listRes_green {
+  background-color: green;
+}
+
+.listRes_yellow {
+  background-color: #cca300;
+}
+
+.listRes_card-custom:hover {
+  box-shadow: #bbb 2px 2px 2px 2px;
+}
+
+.listRes_card-custom img {
+  width: 101%;
+  height: 65% !important;
+  border-radius: 5px 5px 0px 0px;
+  padding: 0px;
+  margin: -0.5% 0px 0px -0.5%;
+  border: hidden;
+}
+
+.listRes_card-custom .listRes_title {
+  color: black;
+  margin: 0px 0px 0px 10px;
+  text-align: left;
+  padding: 0px;
+  font-weight: 700;
+}
+
+.listRes_card-custom .listRes_address {
+  color: gray;
+  margin: 0px 0px 0px 10px;
+  font-weight: lighter;
+  line-height: 1.5;
+  font-family: "Arial, sans-serif";
+}
+
+.listRes_break-line-card {
+  margin-top: 2px;
+  border-top: 1px solid #ddd;
+}
+
+.listRes_icon-offer {
+  color: #cf2127;
+  margin: auto 10px;
+  font-size: 18px !important;
+  float: left;
+  transform: translateY(-15%);
+}
+
+.listRes_text-offer {
+  color: #187caa;
+  font-weight: bold;
+  font-size: 14px;
+  transform: translateY(-15%);
+}
+
+.listRes_vertify-icon  {
+    float: left;
+    margin: 0px 3px 0px 7px;
+    color: #ffc107;
+    width: 1rem !important;
+    height: 1rem !important;
+    transform: translateY(20%);
+}
