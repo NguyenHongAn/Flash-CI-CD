@@ -8,4 +8,8 @@ COPY . /app
 RUN npm run build
 # docker run using nginx
 FROM nginx:latest
+#config nginx with router
+RUN rm -f /etc/nginx/conf.d/default.conf
+COPY /nginx/default.conf /etc/nginx/conf.d
+
 COPY --from=build /app/build /usr/share/nginx/html

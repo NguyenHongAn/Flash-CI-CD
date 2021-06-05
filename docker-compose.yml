@@ -1,0 +1,31 @@
+services:
+  web:
+    container_name: flash-cicd
+    image: hongannguyen/flash-cicd:latest
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - "flash-api"
+  flash-api:
+    container_name: flash-api
+    image: hongannguyen/flash-api:latest
+    restart: always
+    build: .
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8010:8010"
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: "mongo"
+    image: "mongo"
+    restart: always
+    command: mongod --port 27018
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27018:27018"
