@@ -1,6 +1,6 @@
 const DEV_ENV = {
   ENV: "DEVELOPMENT",
-  SERVER_URL: "http://localhost:8000",
+  SERVER_URL: "https://flash-api-01.herokuapp.com",
   SERVER_URL_SOCKET: "http://localhost:8010",
 };
 

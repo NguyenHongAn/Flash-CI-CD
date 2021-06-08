@@ -1,13 +1,12 @@
 services:
   web:
-    container_name: flash-cicd
-    image: hongannguyen/flash-cicd:latest
+    container_name: flash-app
+    image: hongannguyen/flash-app:latest
     restart: always
     build: .
     ports:
-      - "8080:8080"
-    links:
-      - "flash-api"
+      - "8080:80"
+
   flash-api:
     container_name: flash-api
     image: hongannguyen/flash-api:latest
