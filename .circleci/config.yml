@@ -58,7 +58,7 @@ workflows:
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   falsh-cicd:
     jobs:
-      - node/test
+      # - node/test
       - build-and-push:
           # requires:
           #   - node/test
