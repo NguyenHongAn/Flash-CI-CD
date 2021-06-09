@@ -47,7 +47,6 @@ jobs:
   #         fingerprints:
   #           - $SSH_KEY_FINGERPRINT
   #     - run: ssh -oStrictHostKeyChecking=no -p 24700 $DEPLOYED_USER@$DEPLOYED_SERVER_IP "cd /home/delivery/customer && sh deploy.sh"
-
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
