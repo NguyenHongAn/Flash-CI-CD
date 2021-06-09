@@ -36,6 +36,25 @@ jobs:
           branch_pattern: main
           event: pass
           template: success_tagged_deploy_1
+      - slack/notify:
+          channel: SLACK_DEFAULT_CHANNEL
+          branch_pattern: main
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
       - docker/push:
           digest-path: /tmp/digest.txt
           image: $DOCKER_IMAGE
