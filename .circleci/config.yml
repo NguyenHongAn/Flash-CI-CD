@@ -63,8 +63,6 @@ workflows:
       - slack/on-hold:
           context:
             - slack-secrets
-          requires:
-            - test
           filters:
             tags:
               only: /^v.*/
@@ -73,7 +71,6 @@ workflows:
       - pause_workflow:
           type: approval
           requires:
-            - test
             - slack/on-hold
           filters:
             tags:
