@@ -7,7 +7,7 @@ orbs:
   # Orbs reduce the amount of configuration required for common tasks.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
   node: circleci/node@4.1
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4.0
   docker: circleci/docker@1.4.0
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
@@ -27,12 +27,12 @@ jobs:
           image: $DOCKER_IMAGE
           tag: $DOCKER_TAG
       - slack/notify:
-          channel: $SLACK_DEFAULT_CHANNEL
+          channel: SLACK_DEFAULT_CHANNEL
           branch_pattern: main
           event: fail
           template: basic_fail_1
       - slack/notify:
-          channel: $SLACK_DEFAULT_CHANNEL
+          channel: SLACK_DEFAULT_CHANNEL
           branch_pattern: main
           event: pass
           template: success_tagged_deploy_1
@@ -62,7 +62,6 @@ workflows:
       - build-and-push:
           # requires:
           #   - node/test
-          context: SLACK_ACCESS_TOKEN
           filters:
             branches:
               only:
