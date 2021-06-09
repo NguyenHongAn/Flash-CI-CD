@@ -59,6 +59,7 @@ workflows:
     jobs:
       # - node/test
       - build-and-push:
+          context: slack-secrets
           # requires:
           #   - node/test
           filters:
