@@ -27,12 +27,12 @@ jobs:
           image: $DOCKER_IMAGE
           tag: $DOCKER_TAG
       - slack/notify:
-          #channel: $SLACK_DEFAULT_CHANNEL
+          channel: https://flash-cicd.slack.com/archives/C024CMVA4FM
           branch_pattern: main
           event: fail
           template: basic_fail_1
       - slack/notify:
-          #channel: $SLACK_DEFAULT_CHANNEL
+          channel: https://flash-cicd.slack.com/archives/C024CMVA4FM
           branch_pattern: main
           event: pass
           template: success_tagged_deploy_1
